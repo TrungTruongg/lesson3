@@ -1,12 +1,14 @@
-import Card from "./components/Card";
 import Home from "./components/Home";
-
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Login from "./components/Login";
 function App() {
   return (
-    <div className="w-full">
-      <Home />
-      <Card />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
 
