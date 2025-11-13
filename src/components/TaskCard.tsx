@@ -2,38 +2,46 @@ import {
   ClockIcon,
   EditIcon,
   FlagIcon,
-  PaperclipIcon,
+  AttachmentIcon,
 } from "../assets/icon/Icons";
 import { flags, users } from "../constants";
 
-const Card = (props: any) => {
+const TaskCard = ({ task }: any) => {
+  const {
+    taskId,
+    title,
+    description,
+    flagId,
+    assignedTo,
+    deadline,
+    totalAttachments,
+  } = task;
+  
   const usersAssigned = users.filter(
-    (item) => item.userId === props.assignedTo
+    (item) => item.userId === assignedTo
   );
 
   const flagsColorByTasks = flags.filter(
-    (item) => item.flagId === props.flagId
+    (item) => item.flagId === flagId
   );
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-  };
+  const formatDate = new Date(deadline).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
 
   return (
-    <div className="bg-white border border-gray-200 rounded-[5px] p-4 shadow-sm hover:shadow-md transition-shadow">
+    <div key={taskId} className="bg-white border border-gray-200 rounded-[5px] p-4 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex flex-col gap-3">
         <div className="flex items-start justify-between mb-2">
-          <h3 className="font-semibold text-sm">{props.title}</h3>
+          <h3 className="font-semibold text-sm">{title}</h3>
           <button className="text-gray-400 hover:text-gray-600">
             <EditIcon />
           </button>
         </div>
 
         <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-          {props.description}
+          {description}
         </p>
 
         {usersAssigned.map((user: any) => (
@@ -49,8 +57,8 @@ const Card = (props: any) => {
 
       <div className="flex gap-5 items-center justify-center w-full pt-2 ">
         <div className="flex items-center gap-2 font-bold">
-          <PaperclipIcon />
-          {props.totalAttachments}
+          <AttachmentIcon />
+          {totalAttachments}
         </div>
         {flagsColorByTasks.map((flagColor: any) => (
           <FlagIcon color={flagColor.color} />
@@ -58,11 +66,11 @@ const Card = (props: any) => {
 
         <div className="flex items-center gap-2 font-bold">
           <ClockIcon />
-          {formatDate(props.deadline)}
+          {formatDate}
         </div>
       </div>
     </div>
   );
 };
 
-export default Card;
+export default TaskCard;
