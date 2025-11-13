@@ -1,16 +1,40 @@
+import { useState } from "react";
 import { CloseIcon, FlagIcon } from "../assets/icon/Icons";
 import { taskStatus, users } from "../constants";
 
-function CreateTaskModal({
-  open,
-  onClose,
-  title,
-  description,
-  deadline,
-  userName,
-  statusName,
-}: any) {
+function CreateTaskModal({ open, onClose, onSave }: any) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [assignedTo, setAssignedTo] = useState(1);
+  const [statusId, setStatusId] = useState(1);
+
   if (!open) return null;
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const newTask = {
+      taskId: Date.now(),
+      title: title,
+      description: description,
+      deadline: new Date(deadline),
+      assignedTo: assignedTo,
+      statusId: statusId,
+      flagId: 1,  
+      totalAttachments: 0
+    };
+
+    onSave(newTask);
+
+    setTitle("");
+    setDescription("");
+    setDeadline("");
+    setAssignedTo(1);
+    setStatusId(1);
+
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -39,7 +63,7 @@ function CreateTaskModal({
           <h2 className="text-lg font-semibold mb-5 leading-7 ">Save task</h2>
 
           {/* Form */}
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSave}>
             {/* Title and End Date */}
             <div className="flex gap-4">
               <div className="w-[407px]">
@@ -49,6 +73,7 @@ function CreateTaskModal({
                 <input
                   type="text"
                   value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="Type title of task"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
@@ -62,7 +87,7 @@ function CreateTaskModal({
                 </label>
                 <input
                   type="date"
-                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
                   defaultValue="15 / 06 / 2024"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
@@ -78,6 +103,7 @@ function CreateTaskModal({
                 <textarea
                   placeholder="Type description..."
                   value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
                 />
@@ -85,9 +111,12 @@ function CreateTaskModal({
               <div className="w-[163px]">
                 <label className="block text-sm font-medium mb-1">Assign</label>
 
-                <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <select
+                  onChange={(e) => setAssignedTo(Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                >
                   {users.map((user) => (
-                    <option value={userName} key={user.userId}>
+                    <option value={user.userId} key={user.userId}>
                       {user.name}
                     </option>
                   ))}
@@ -98,14 +127,18 @@ function CreateTaskModal({
             {/* Status */}
             <div>
               <label className="block text-sm font-medium mb-1">Status</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-[#666666] focus:outline-none focus:ring-2 focus:ring-purple-500">
-                <option value="" disabled selected>
+              <select
+                value={statusId}
+                onChange={(e) => setStatusId(Number(e.target.value))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-[#666666] focus:outline-none focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="" disabled>
                   Choose status
                 </option>
                 {taskStatus.map((status) => (
                   <option
                     key={status.statusId}
-                    value={statusName}
+                    value={status.statusId}
                     className="text-gray-900"
                   >
                     {status.name}

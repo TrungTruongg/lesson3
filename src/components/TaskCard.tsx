@@ -16,7 +16,7 @@ const TaskCard = ({ task }: any) => {
     deadline,
     totalAttachments,
   } = task;
-  
+
   const usersAssigned = users.filter(
     (item) => item.userId === assignedTo
   );
@@ -31,8 +31,8 @@ const TaskCard = ({ task }: any) => {
   });
 
   return (
-    <div key={taskId} className="bg-white border border-gray-200 rounded-[5px] p-4 shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex flex-col gap-3">
+    <div key={taskId} className="bg-white border border-gray-200 rounded-[5px]  shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex flex-col gap-3 p-4">
         <div className="flex items-start justify-between mb-2">
           <h3 className="font-semibold text-sm">{title}</h3>
           <button className="text-gray-400 hover:text-gray-600">
@@ -53,20 +53,19 @@ const TaskCard = ({ task }: any) => {
         ))}
       </div>
 
-      <div className="border-t border-[#e6ecf0] -mx-4"></div>
-
-      <div className="flex gap-5 items-center justify-center w-full pt-2 ">
+      <div className="flex gap-4 items-center justify-center px-2 py-3 border-t border-[#e6ecf0] w-full ">
         <div className="flex items-center gap-2 font-bold">
-          <AttachmentIcon />
-          {totalAttachments}
+          <AttachmentIcon disabled={totalAttachments > 0} />
+          <span>{totalAttachments || null}</span>
         </div>
+
         {flagsColorByTasks.map((flagColor: any) => (
-          <FlagIcon color={flagColor.color} />
+          <FlagIcon key={flagColor.flagId} color={flagColor.color} />
         ))}
 
         <div className="flex items-center gap-2 font-bold">
           <ClockIcon />
-          {formatDate}
+          <span>{formatDate}</span>
         </div>
       </div>
     </div>

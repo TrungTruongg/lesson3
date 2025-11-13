@@ -1,14 +1,14 @@
 import { MoreIcon, PlusIcon } from "../assets/icon/Icons";
-import { tasks, taskStatus } from "../constants";
+import { taskStatus } from "../constants";
 import TaskCard from "./TaskCard";
 
-function TaskList() {
+function TaskList({ tasks }: any) {
   return (
     <div className="p-6 pt-0">
       <div className="max-w-7xl mx-auto grid grid-cols-4 gap-[18px]">
         {taskStatus.map((status) => {
           const taskForStatus = tasks.filter(
-            (task) => task.statusId === status.statusId
+            (task: any) => task.statusId === status.statusId
           );
 
           return (

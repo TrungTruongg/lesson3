@@ -2,13 +2,20 @@ import { useState } from "react";
 import CreateTaskModal from "./CreateTaskModal";
 import List from "./TaskList";
 import SearchItem from "./SearchItem";
+import { tasks } from "../constants";
 
 function Home() {
   const [open, setOpen] = useState(false);
+  const [taskList, setTaskList] = useState(tasks);
 
   const handleOpenModal = () => {
     setOpen(true);
   };
+
+  const handleSaveTask = (newTask: any) => {
+    console.log("Task mới:", newTask); 
+    setTaskList([...taskList, newTask]);
+  }
   return (
     <>
       <div className="min-h-screen bg-gray-50 ">
@@ -33,10 +40,10 @@ function Home() {
             </button>
           </div>
         </div>
-        <List />
+        <List tasks={taskList} />
          
       </div>
-     <CreateTaskModal open={open} onClose={() => setOpen(false)} />
+     <CreateTaskModal open={open} onClose={() => setOpen(false)} onSave={handleSaveTask} />
     </>
   );
 }

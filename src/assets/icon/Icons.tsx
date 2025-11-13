@@ -7,7 +7,7 @@ function SearchIcon() {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_1570_683)">
+      <g clipPath="url(#clip0_1570_683)">
         <path
           d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z"
           fill="#C4C4C4"
@@ -39,7 +39,7 @@ function EditIcon() {
   );
 }
 
-function AttachmentIcon() {
+function AttachmentIcon({disabled = false}) {
   return (
     <svg
       width="11"
@@ -50,7 +50,7 @@ function AttachmentIcon() {
     >
       <path
         d="M9.5 5V16.5C9.5 18.71 7.71 20.5 5.5 20.5C3.29 20.5 1.5 18.71 1.5 16.5V4C1.5 2.62 2.62 1.5 4 1.5C5.38 1.5 6.5 2.62 6.5 4V14.5C6.5 15.05 6.05 15.5 5.5 15.5C4.95 15.5 4.5 15.05 4.5 14.5V5H3V14.5C3 15.88 4.12 17 5.5 17C6.88 17 8 15.88 8 14.5V4C8 1.79 6.21 0 4 0C1.79 0 0 1.79 0 4V16.5C0 19.54 2.46 22 5.5 22C8.54 22 11 19.54 11 16.5V5H9.5Z"
-        fill="#1D2D35"
+        fill={disabled ? "#1D2D35" : "#C4C4C4"}
       />
     </svg>
   );
@@ -99,9 +99,9 @@ function CloseIcon() {
       <path
         d="M13 1L1 13M1 1L13 13"
         stroke="#717680"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
