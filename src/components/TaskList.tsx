@@ -2,7 +2,7 @@ import { MoreIcon, PlusIcon } from "../assets/icon/Icons";
 import { taskStatus } from "../constants";
 import TaskCard from "./TaskCard";
 
-function TaskList({ tasks }: any) {
+function TaskList({ tasks, onUpdateTask  }: any) {
   return (
     <div className="p-6 pt-0">
       <div className="max-w-7xl mx-auto grid grid-cols-4 gap-[18px]">
@@ -48,6 +48,7 @@ function TaskList({ tasks }: any) {
                     <TaskCard
                       key={task.taskId}
                       task={task}
+                      onUpdate={onUpdateTask}
                     />
                   );
                 })}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateTaskModal from "./CreateTaskModal";
 import List from "./TaskList";
 import SearchItem from "./SearchItem";
@@ -6,31 +6,51 @@ import { tasks } from "../constants";
 
 function Home() {
   const [open, setOpen] = useState(false);
-  const [taskList, setTaskList] = useState(tasks);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const dataFromLocalstorage: any = () => {
+    const savedTasks = localStorage.getItem("taskList");
+    return savedTasks ? JSON.parse(savedTasks) : tasks;
+  }
+
+  const [taskList, setTaskList] = useState(dataFromLocalstorage);
+ 
+
+  useEffect(() => {
+    localStorage.setItem("taskList", JSON.stringify(taskList));
+  }, [taskList]);
 
   const handleOpenModal = () => {
     setOpen(true);
   };
 
   const handleSaveTask = (newTask: any) => {
-    console.log("Task mới:", newTask); 
     setTaskList([...taskList, newTask]);
-  }
+    
+  };
+
+  const handleUpdateTask = (updatedTask: any) => {
+    setTaskList(
+      taskList.map((task: any) =>
+        task.taskId === updatedTask.taskId ? updatedTask : task
+      )
+    );
+    
+  };
+
+  const filteredTasks = taskList.filter((task: any) => {
+    const query = searchTerm.toLowerCase();
+    const title = task.title.toLowerCase();
+    const description = task.description.toLowerCase();
+
+    return title.includes(query) || description.includes(query);
+  });
   return (
     <>
       <div className="min-h-screen bg-gray-50 ">
         <div className="w-full  px-6 py-4">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
-            {/* <div className="flex items-center gap-2 border border-gray-300 rounded-sm px-3 py-2 bg-white w-80">
-              <SearchIcon />
-              <input
-                type="text"
-                placeholder="Search Items"
-                className="outline-none text-sm text-gray-700 placeholder-gray-400 bg-transparent flex-1"
-              />
-            </div> */}
-
-            <SearchItem />
+            <SearchItem searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
             <button
               onClick={handleOpenModal}
@@ -40,10 +60,13 @@ function Home() {
             </button>
           </div>
         </div>
-        <List tasks={taskList} />
-         
+        <List tasks={filteredTasks} onUpdateTask={handleUpdateTask} />
       </div>
-     <CreateTaskModal open={open} onClose={() => setOpen(false)} onSave={handleSaveTask} />
+      <CreateTaskModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onSave={handleSaveTask}
+      />
     </>
   );
 }

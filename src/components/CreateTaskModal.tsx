@@ -1,13 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CloseIcon, FlagIcon } from "../assets/icon/Icons";
 import { taskStatus, users } from "../constants";
 
-function CreateTaskModal({ open, onClose, onSave }: any) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [deadline, setDeadline] = useState("");
-  const [assignedTo, setAssignedTo] = useState(1);
-  const [statusId, setStatusId] = useState(1);
+function CreateTaskModal({
+  titleModal = "",
+  desModal = "",
+  deadlineModal = "",
+  assignedToModal = 1,
+  statusIdModal = 1,
+  flagIdModal = 1,
+  totalAttachmentsModal = 0,
+  open,
+  onClose,
+  onSave,
+}: any) {
+  const [title, setTitle] = useState(titleModal);
+  const [description, setDescription] = useState(desModal);
+  const [deadline, setDeadline] = useState(deadlineModal);
+  const [assignedTo, setAssignedTo] = useState(assignedToModal);
+  const [statusId, setStatusId] = useState(statusIdModal);
+
+  useEffect(() => {
+    if (open) {
+      setTitle(titleModal || "");
+      setDescription(desModal || "");
+      setDeadline(deadlineModal || "");
+      setAssignedTo(assignedToModal || 1);
+      setStatusId(statusIdModal || 1);
+    }
+  }, [
+    open,
+    titleModal,
+    desModal,
+    deadlineModal,
+    assignedToModal,
+    statusIdModal,
+  ]);
 
   if (!open) return null;
 
@@ -21,17 +49,11 @@ function CreateTaskModal({ open, onClose, onSave }: any) {
       deadline: new Date(deadline),
       assignedTo: assignedTo,
       statusId: statusId,
-      flagId: 1,  
-      totalAttachments: 0
+      flagId: flagIdModal,
+      totalAttachments: totalAttachmentsModal,
     };
 
     onSave(newTask);
-
-    setTitle("");
-    setDescription("");
-    setDeadline("");
-    setAssignedTo(1);
-    setStatusId(1);
 
     onClose();
   };
@@ -43,10 +65,8 @@ function CreateTaskModal({ open, onClose, onSave }: any) {
         onClick={onClose}
       ></div>
 
-      {/* Modal Content */}
       <div className="relative bg-white rounded-xl w-[634px] max-h-[538px] overflow-y-auto shadow-xl">
         <div className="p-6">
-          {/* Header */}
           <div className="flex items-center justify-between mb-3">
             <div className="inline-flex items-center justify-center w-8 h-8 border border-[#e9eaeb] rounded-[10px] gap-2.5">
               <FlagIcon color="#00FF00" />
@@ -54,7 +74,9 @@ function CreateTaskModal({ open, onClose, onSave }: any) {
 
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 cursor-pointer"
+              className="text-gray-400 hover:text-gray-600 flex items-center justify-center hover:bg-[#d5d5d5] rounded-full 
+                  h-[30px] w-[30px] font-bold  
+                  border border-transparent transition"
             >
               <CloseIcon />
             </button>
@@ -62,9 +84,7 @@ function CreateTaskModal({ open, onClose, onSave }: any) {
 
           <h2 className="text-lg font-semibold mb-5 leading-7 ">Save task</h2>
 
-          {/* Form */}
           <form className="space-y-4" onSubmit={handleSave}>
-            {/* Title and End Date */}
             <div className="flex gap-4">
               <div className="w-[407px]">
                 <label className="block text-sm font-medium mb-1">
@@ -87,6 +107,7 @@ function CreateTaskModal({ open, onClose, onSave }: any) {
                 </label>
                 <input
                   type="date"
+                  value={deadline}
                   onChange={(e) => setDeadline(e.target.value)}
                   defaultValue="15 / 06 / 2024"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -94,7 +115,6 @@ function CreateTaskModal({ open, onClose, onSave }: any) {
               </div>
             </div>
 
-            {/* Description and Assign */}
             <div className="flex gap-4">
               <div className="w-[407px]">
                 <label className="block text-sm font-medium mb-1">
@@ -112,6 +132,7 @@ function CreateTaskModal({ open, onClose, onSave }: any) {
                 <label className="block text-sm font-medium mb-1">Assign</label>
 
                 <select
+                  value={assignedTo}
                   onChange={(e) => setAssignedTo(Number(e.target.value))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
@@ -124,7 +145,6 @@ function CreateTaskModal({ open, onClose, onSave }: any) {
               </div>
             </div>
 
-            {/* Status */}
             <div>
               <label className="block text-sm font-medium mb-1">Status</label>
               <select
@@ -147,7 +167,6 @@ function CreateTaskModal({ open, onClose, onSave }: any) {
               </select>
             </div>
 
-            {/* Buttons */}
             <div className="flex gap-3 pt-4">
               <button
                 type="button"
