@@ -3,6 +3,7 @@ import CreateTaskModal from "./CreateTaskModal";
 import List from "./TaskList";
 import SearchItem from "./SearchItem";
 import { tasks } from "../constants";
+import { Box, Button } from "@mui/material";
 
 function Home() {
   const [open, setOpen] = useState(false);
@@ -11,10 +12,9 @@ function Home() {
   const dataFromLocalstorage: any = () => {
     const savedTasks = localStorage.getItem("taskList");
     return savedTasks ? JSON.parse(savedTasks) : tasks;
-  }
+  };
 
   const [taskList, setTaskList] = useState(dataFromLocalstorage);
- 
 
   useEffect(() => {
     localStorage.setItem("taskList", JSON.stringify(taskList));
@@ -26,7 +26,6 @@ function Home() {
 
   const handleSaveTask = (newTask: any) => {
     setTaskList([...taskList, newTask]);
-    
   };
 
   const handleUpdateTask = (updatedTask: any) => {
@@ -35,7 +34,6 @@ function Home() {
         task.taskId === updatedTask.taskId ? updatedTask : task
       )
     );
-    
   };
 
   const filteredTasks = taskList.filter((task: any) => {
@@ -47,21 +45,26 @@ function Home() {
   });
   return (
     <>
-      <div className="min-h-screen bg-gray-50 ">
-        <div className="w-full  px-6 py-4">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <SearchItem searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Box className="min-h-screen bg-gray-50 ">
+        <Box className="max-w-7xl mx-auto flex justify-between items-center py-4">
+          <SearchItem searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-            <button
-              onClick={handleOpenModal}
-              className="bg-[#0013fe] text-white border rounded-[5px] px-6 py-2.5 text-sm font-normal cursor-pointer"
-            >
-              New Item
-            </button>
-          </div>
-        </div>
+          <Button
+            variant="contained"
+            onClick={handleOpenModal}
+            sx={{
+              textTransform: "none",
+              backgroundColor: "#0013fe",
+              fontSize: "14px",
+              fontWeight: 500,
+            }}
+          >
+            New Item
+          </Button>
+        </Box>
+
         <List tasks={filteredTasks} onUpdateTask={handleUpdateTask} />
-      </div>
+      </Box>
       <CreateTaskModal
         open={open}
         onClose={() => setOpen(false)}
